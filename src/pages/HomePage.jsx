@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const HomePage = () => {
 	const [ display, setDisplay ] = useState('')
 	const [ computerChoice, setComputerChoice ] = useState('')
 	const [ displayWinner, setDisplayWinner ] = useState('')
+	const [ coin, setCoin ] = useState('')
+	const [ count, setCount ] = useState(0)
 
 	const calculateComputerChoice = () => {
 		const array = [ 'paper', 'rock', 'scizzors' ]
@@ -12,15 +15,19 @@ const HomePage = () => {
 		setComputerChoice(array[i])
 	}
 
-	// useEffect(() => {
-	// 	const calculateComputerChoice = () => {
-	// 		const array = [ 'paper', 'rock', 'scizzors' ]
-	// 		let i = Math.floor(Math.random() * array.length)
-	// 		console.log(i)
-	// 		setComputerChoice(array[i])
-	// 	}
-	// 	calculateComputerChoice()
-	// }, [])
+	const getDataFromApi = async () => {
+		const resp = await axios.get(`https://api.coinmarketcap.com/v2/ticker/?limit=20`)
+		console.log(resp.data.data[1].name)
+		console.log(resp.data.data[1].quotes.USD.price)
+		setCoin(resp.data.data[1].quotes.USD.price)
+	}
+
+	useEffect(
+		() => {
+			getDataFromApi()
+		},
+		[ setInterval(60000) ]
+	)
 
 	useEffect(
 		() => {
@@ -103,6 +110,9 @@ const HomePage = () => {
 							</li>
 						</ul>
 					</section>
+				</section>
+				<section>
+					<h1 id="bitcoin">bitcoin value is: {coin}</h1>
 				</section>
 			</section>
 		</main>

@@ -82,3 +82,7 @@ body {
 #playAgain:hover {
 	background-color: red;
 }
+
+#bitcoin {
+	text-align: center;
+}
